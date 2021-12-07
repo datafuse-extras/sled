@@ -116,6 +116,8 @@ impl AccessQueue {
                 // consumption
                 let mut ret;
                 let mut full_list_ptr = self.full_list.load(Ordering::Acquire);
+                // this is rust-style do-while.
+                #[allow(clippy::blocks_in_if_conditions)]
                 while {
                     // we loop because maybe other threads are pushing stuff too
                     block.next.store(full_list_ptr, Ordering::Release);

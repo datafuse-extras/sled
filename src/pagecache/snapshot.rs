@@ -477,7 +477,7 @@ fn advance_snapshot(
 pub fn read_snapshot_or_default(config: &RunningConfig) -> Result<Snapshot> {
     // NB we want to error out if the read snapshot was corrupted.
     // We only use a default Snapshot when there is no snapshot found.
-    let last_snap = read_snapshot(config)?.unwrap_or_else(Snapshot::default);
+    let last_snap = read_snapshot(config)?.unwrap_or_default();
 
     let log_iter =
         raw_segment_iter_from(last_snap.stable_lsn.unwrap_or(0), config)?;
@@ -532,8 +532,6 @@ fn read_snapshot(config: &RunningConfig) -> Result<Option<Snapshot>> {
 
     #[cfg(feature = "zstd")]
     let bytes = if config.use_compression {
-        use std::convert::TryInto;
-
         let len_expected: u64 =
             u64::from_le_bytes(len_expected_bytes.as_ref().try_into().unwrap());
 

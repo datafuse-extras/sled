@@ -105,6 +105,7 @@ fn run(
         //
         // this looks weird because it's a rust-style do-while
         // where the conditional is the full body
+        #[allow(clippy::blocks_in_if_conditions)]
         while {
             let made_progress = match pagecache.attempt_gc() {
                 Err(e) => {
