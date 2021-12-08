@@ -94,7 +94,7 @@
         trivial_casts,
         trivial_numeric_casts,
         unsafe_code,
-        unused_qualifications,
+        // unused_qualifications,
     )
 )]
 #![cfg_attr(feature = "testing", deny(
@@ -138,7 +138,7 @@
     clippy::non_ascii_literal,
     clippy::path_buf_push_overwrite,
     clippy::print_stdout,
-    clippy::pub_enum_variant_names,
+    // clippy::pub_enum_variant_names,
     clippy::redundant_closure_for_method_calls,
     clippy::shadow_reuse,
     clippy::shadow_same,
@@ -152,7 +152,7 @@
     clippy::unseparated_literal_suffix,
     clippy::used_underscore_binding,
     clippy::wildcard_dependencies,
-    clippy::wrong_pub_self_convention,
+    // clippy::wrong_pub_self_convention,
 ))]
 #![cfg_attr(
     feature = "testing",
@@ -416,28 +416,35 @@ pub(crate) enum Link {
 /// A fast map that is not resistant to collision attacks. Works
 /// on 8 bytes at a time.
 #[cfg(not(feature = "testing"))]
-pub(crate) type FastMap8<K, V> =
-    std::collections::HashMap<K, V, std::hash::BuildHasherDefault<fnv::Hasher>>;
+pub(crate) type FastMap8<K, V> = std::collections::hash_map::HashMap<
+    K,
+    V,
+    std::hash::BuildHasherDefault<fnv::Hasher>,
+>;
 
 #[cfg(feature = "testing")]
-pub(crate) type FastMap8<K, V> = BTreeMap<K, V>;
+pub(crate) type FastMap8<K, V> = std::collections::btree_map::BTreeMap<K, V>;
 
 /// A fast set that is not resistant to collision attacks. Works
 /// on 8 bytes at a time.
 #[cfg(not(feature = "testing"))]
-pub(crate) type FastSet8<V> =
-    std::collections::HashSet<V, std::hash::BuildHasherDefault<fnv::Hasher>>;
+pub(crate) type FastSet8<V> = std::collections::hash_set::HashSet<
+    V,
+    std::hash::BuildHasherDefault<fnv::Hasher>,
+>;
 
 #[cfg(feature = "testing")]
-pub(crate) type FastSet8<V> = std::collections::BTreeSet<V>;
+pub(crate) type FastSet8<V> = std::collections::btree_set::BTreeSet<V>;
 
 #[cfg(not(feature = "testing"))]
-use std::collections::HashMap as Map;
+use std::collections::hash_map::HashMap as Map;
 
 // we avoid HashMap while testing because
 // it makes tests non-deterministic
 #[cfg(feature = "testing")]
-use std::collections::{BTreeMap as Map, BTreeSet as Set};
+use std::collections::{
+    btree_map::BTreeMap as Map, btree_set::BTreeSet as Set,
+};
 
 /// A function that may be configured on a particular shared `Tree`
 /// that will be applied as a kind of read-modify-write operator
