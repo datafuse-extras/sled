@@ -1,7 +1,6 @@
 name: Rust
 
-on:
-  push:
+on: [push, pull_request]
 
 jobs:
   clippy_check:
