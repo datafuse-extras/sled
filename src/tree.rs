@@ -5,6 +5,7 @@ use std::{
     ops::{self, Deref, RangeBounds},
     sync::atomic::Ordering::SeqCst,
 };
+use std::hint::spin_loop;
 
 use parking_lot::RwLock;
 
@@ -1701,9 +1702,7 @@ impl Tree {
                 .compare_exchange(from, new_root_pid, SeqCst, SeqCst)
                 .is_err()
             {
-                // `hint::spin_loop` requires Rust 1.49.
-                #[allow(deprecated)]
-                std::sync::atomic::spin_loop_hint();
+                spin_loop()
             }
 
             Ok(true)

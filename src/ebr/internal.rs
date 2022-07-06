@@ -217,6 +217,7 @@ const fn no_op_func() {}
 #[derive(Debug)]
 struct SealedBag {
     epoch: Epoch,
+    #[allow(dead_code)]
     bag: Bag,
 }
 
