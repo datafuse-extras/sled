@@ -2,6 +2,7 @@
 //! be very unhappy. We rely heavily on TSAN for finding
 //! races, so we don't use `lazy_static`.
 
+use std::hint::spin_loop;
 use std::sync::atomic::{
     AtomicBool, AtomicPtr,
     Ordering::{Acquire, SeqCst},
@@ -64,9 +65,7 @@ where
             .compare_exchange(false, true, SeqCst, SeqCst)
             .is_err()
         {
-            // `hint::spin_loop` requires Rust 1.49.
-            #[allow(deprecated)]
-            std::sync::atomic::spin_loop_hint();
+            spin_loop()
         }
 
         {
