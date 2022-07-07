@@ -533,7 +533,7 @@ fn read_snapshot(config: &RunningConfig) -> Result<Option<Snapshot>> {
     #[cfg(feature = "zstd")]
     let bytes = if config.use_compression {
         let len_expected: u64 =
-            u64::from_le_bytes(len_expected_bytes.as_ref().try_into().unwrap());
+            u64::from_le_bytes(len_expected_bytes);
 
         decompress(&*buf, usize::try_from(len_expected).unwrap()).unwrap()
     } else {
